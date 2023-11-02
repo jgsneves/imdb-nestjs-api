@@ -4,6 +4,7 @@ import { prisma } from 'src/clients/prisma-client';
 import { User } from '@prisma/client';
 import { v4 as uuid } from 'uuid';
 import { CreateUserDto } from './dto/create-user-schema';
+import { hash } from 'bcrypt';
 
 type CreateUserData = Omit<User, 'createdAt' | 'updatedAt' | 'isActive'>;
 
@@ -11,13 +12,16 @@ type CreateUserData = Omit<User, 'createdAt' | 'updatedAt' | 'isActive'>;
 export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const { email, name, password, role } = createUserDto;
+    const saltRounds = 10;
+
+    const passwordHash = await hash(password, saltRounds);
 
     const data: CreateUserData = {
       id: uuid(),
       email,
       name,
       role,
-      password,
+      password: passwordHash,
     };
 
     const result = await prisma.user.create({ data });
