@@ -9,6 +9,7 @@ import {
   UseGuards,
   UsePipes,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto, createMovieSchema } from './dto/create-movie.dto';
@@ -32,8 +33,21 @@ export class MoviesController {
   }
 
   @Get()
-  findAll() {
-    return this.moviesService.findAll();
+  findAll(
+    @Query('directorName') directorName: string,
+    @Query('genre') genre: string,
+    @Query('name') name: string,
+    @Query('actors') actors: string,
+  ) {
+    const actorsQueryParam = this.parseFindAllActorsQueryParam(actors);
+
+    console.log('queryParams', { directorName, genre, name, actorsQueryParam });
+    return this.moviesService.findAll({
+      directorNameFilter: directorName,
+      genreFilter: genre,
+      movieNameFilter: name,
+      actorsFilter: actorsQueryParam,
+    });
   }
 
   @Get(':uuid')
@@ -56,5 +70,10 @@ export class MoviesController {
   @Delete(':uuid')
   remove(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     return this.moviesService.remove(uuid);
+  }
+
+  private parseFindAllActorsQueryParam(actorsQueryParam?: string) {
+    if (actorsQueryParam) return actorsQueryParam.split(',');
+    return [];
   }
 }

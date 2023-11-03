@@ -11,6 +11,13 @@ interface CreateMovieData extends OmitMovieData {
   releaseDate: string;
 }
 
+interface FindAllQueryParams {
+  directorNameFilter?: string;
+  movieNameFilter?: string;
+  genreFilter?: string;
+  actorsFilter: string[];
+}
+
 @Injectable()
 export class MoviesService {
   async create(createMovieDto: CreateMovieDto) {
@@ -31,8 +38,12 @@ export class MoviesService {
     return result;
   }
 
-  async findAll() {
-    const result = await prisma.movie.findMany();
+  async findAll(queryParams: FindAllQueryParams) {
+    const whereClause = this.buildFindAllWhereClause(queryParams);
+
+    const result = await prisma.movie.findMany({
+      where: whereClause,
+    });
 
     return result;
   }
@@ -54,5 +65,49 @@ export class MoviesService {
 
   async remove(guid: string) {
     await prisma.movie.delete({ where: { id: guid } });
+  }
+
+  private buildFindAllWhereClause(queryParams: FindAllQueryParams) {
+    const result = {};
+
+    if (queryParams.actorsFilter.length > 0) {
+      Object.assign(result, {
+        actors: {
+          hasSome:
+            queryParams.actorsFilter.length > 0
+              ? queryParams.actorsFilter
+              : undefined,
+        },
+      });
+    }
+
+    if (queryParams.directorNameFilter) {
+      Object.assign(result, {
+        directorName: {
+          contains: queryParams.directorNameFilter,
+          mode: 'insensitive',
+        },
+      });
+    }
+
+    if (queryParams.genreFilter) {
+      Object.assign(result, {
+        genre: {
+          contains: queryParams.genreFilter,
+          mode: 'insensitive',
+        },
+      });
+    }
+
+    if (queryParams.movieNameFilter) {
+      Object.assign(result, {
+        name: {
+          contains: queryParams.movieNameFilter,
+          mode: 'insensitive',
+        },
+      });
+    }
+
+    return result;
   }
 }
