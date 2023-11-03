@@ -19,10 +19,14 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 import { ZodValidationPipe } from 'src/validators/zod-validation-pipe';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { VotesService } from 'src/votes/votes.service';
 
 @Controller('movies')
 export class MoviesController {
-  constructor(private readonly moviesService: MoviesService) {}
+  constructor(
+    private readonly moviesService: MoviesService,
+    private readonly votesService: VotesService,
+  ) {}
 
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
@@ -41,7 +45,6 @@ export class MoviesController {
   ) {
     const actorsQueryParam = this.parseFindAllActorsQueryParam(actors);
 
-    console.log('queryParams', { directorName, genre, name, actorsQueryParam });
     return this.moviesService.findAll({
       directorNameFilter: directorName,
       genreFilter: genre,
@@ -53,6 +56,11 @@ export class MoviesController {
   @Get(':uuid')
   findOne(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
     return this.moviesService.findOne(uuid);
+  }
+
+  @Get(':uuid/votes-average')
+  findOneMovieAverage(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+    return this.votesService.findVoteAverageByMovieId(uuid);
   }
 
   @UseGuards(AuthGuard, RolesGuard)
