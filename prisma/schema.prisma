@@ -48,4 +48,6 @@ model Vote {
   user      User     @relation(fields: [userId], references: [id])
   movieId   String   @db.Uuid
   movie     Movie    @relation(fields: [movieId], references: [id])
+
+  @@unique([userId, movieId])
 }
