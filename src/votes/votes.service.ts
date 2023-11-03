@@ -1,18 +1,20 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateVoteDto } from './dto/create-vote.dto';
-import { prisma } from 'src/clients/prisma-client';
 import { Vote } from '@prisma/client';
 import { v4 as uuid } from 'uuid';
 import { createNewVoteMessages } from 'src/constants/response-messages';
+import { PrismaService } from 'src/services/prisma.service';
 
 type CreateVoteData = Omit<Vote, 'createdAt' | 'updatedAt'>;
 
 @Injectable()
 export class VotesService {
+  constructor(private prisma: PrismaService) {}
+
   async create(createVoteDto: CreateVoteDto) {
     const { movieId, userId, value } = createVoteDto;
 
-    const vote = await prisma.vote.findMany({
+    const vote = await this.prisma.vote.findMany({
       where: {
         movieId,
         userId,
@@ -31,13 +33,13 @@ export class VotesService {
       value,
     };
 
-    const result = await prisma.vote.create({ data });
+    const result = await this.prisma.vote.create({ data });
 
     return result;
   }
 
   async findAll(movieIdFilter?: string) {
-    const result = await prisma.vote.findMany({
+    const result = await this.prisma.vote.findMany({
       where: {
         movieId: movieIdFilter,
       },
@@ -49,7 +51,7 @@ export class VotesService {
   async findVoteAverageByMovieId(movieId: string) {
     let average = 0;
 
-    const votes = await prisma.vote.findMany({
+    const votes = await this.prisma.vote.findMany({
       where: {
         movieId,
       },

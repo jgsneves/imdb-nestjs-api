@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from '@prisma/client';
-import { prisma } from 'src/clients/prisma-client';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { v4 as uuid } from 'uuid';
+import { PrismaService } from 'src/services/prisma.service';
 
 type OmitMovieData = Omit<Movie, 'createdAt' | 'updatedAt' | 'releaseDate'>;
 
@@ -20,6 +20,8 @@ interface FindAllQueryParams {
 
 @Injectable()
 export class MoviesService {
+  constructor(private prisma: PrismaService) {}
+
   async create(createMovieDto: CreateMovieDto) {
     const { actors, directorName, genre, name, releaseDate } = createMovieDto;
     const data: CreateMovieData = {
@@ -31,7 +33,7 @@ export class MoviesService {
       releaseDate,
     };
 
-    const result = await prisma.movie.create({
+    const result = await this.prisma.movie.create({
       data,
     });
 
@@ -41,7 +43,7 @@ export class MoviesService {
   async findAll(queryParams: FindAllQueryParams) {
     const whereClause = this.buildFindAllWhereClause(queryParams);
 
-    const result = await prisma.movie.findMany({
+    const result = await this.prisma.movie.findMany({
       where: whereClause,
     });
 
@@ -49,13 +51,13 @@ export class MoviesService {
   }
 
   async findOne(guid: string) {
-    const result = await prisma.movie.findUnique({ where: { id: guid } });
+    const result = await this.prisma.movie.findUnique({ where: { id: guid } });
 
     return result;
   }
 
   async update(guid: string, updateMovieDto: UpdateMovieDto) {
-    const result = await prisma.movie.update({
+    const result = await this.prisma.movie.update({
       where: { id: guid },
       data: { ...updateMovieDto },
     });
@@ -64,7 +66,7 @@ export class MoviesService {
   }
 
   async remove(guid: string) {
-    await prisma.movie.delete({ where: { id: guid } });
+    await this.prisma.movie.delete({ where: { id: guid } });
   }
 
   private buildFindAllWhereClause(queryParams: FindAllQueryParams) {
