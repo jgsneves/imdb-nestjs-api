@@ -12,12 +12,12 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ZodValidationPipe } from 'src/validators/zod-validation-pipe';
 import { CreateUserDto, createUserSchema } from './dto/create-user-schema';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { AuthGuard } from '../auth/auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { ZodValidationPipe } from '../validators/zod-validation-pipe';
 
 @Controller('users')
 export class UsersController {
@@ -39,14 +39,14 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Get(':uuid')
-  findOne(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+  findOne(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.usersService.findOne(uuid);
   }
 
   @UseGuards(AuthGuard)
   @Patch(':uuid')
   update(
-    @Param('uuid', new ParseUUIDPipe()) uuid: string,
+    @Param('uuid', ParseUUIDPipe) uuid: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.update(uuid, updateUserDto);
@@ -54,7 +54,7 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Delete(':uuid')
-  inactivate(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+  inactivate(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.usersService.inactivate(uuid);
   }
 }

@@ -3,6 +3,8 @@ export const createUserValidationMessages = {
   email: 'Forneça um e-mail válido.',
   passwordDoesntMatch: 'A senha deve ser a mesma da confirmação.',
   passwordLenght: 'A senha deve ter ao menos 12 caracteres.',
+  passwordValidation:
+    'A senha deve ter ao menos uma letra minúscula, outra maiúscula, um número e um caractere especial',
 };
 
 export const signInValidationMessages = {

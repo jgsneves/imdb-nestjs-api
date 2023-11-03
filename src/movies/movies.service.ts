@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from '@prisma/client';
-import { CreateMovieDto } from './dto/create-movie.dto';
 import { v4 as uuid } from 'uuid';
-import { PrismaService } from 'src/services/prisma.service';
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 type OmitMovieData = Omit<Movie, 'createdAt' | 'updatedAt' | 'releaseDate'>;
 

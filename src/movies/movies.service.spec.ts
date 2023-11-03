@@ -1,18 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesService } from './movies.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { VotesService } from '../votes/votes.service';
 
 describe('MoviesService', () => {
-  let service: MoviesService;
+  let moviesService: MoviesService;
+  let prismaService: PrismaService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MoviesService],
+      providers: [MoviesService, VotesService, PrismaService],
     }).compile();
 
-    service = module.get<MoviesService>(MoviesService);
+    moviesService = module.get<MoviesService>(MoviesService);
+    prismaService = module.get<PrismaService>(PrismaService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(moviesService).toBeDefined();
+    expect(prismaService).toBeDefined();
   });
 });

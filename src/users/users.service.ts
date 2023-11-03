@@ -4,7 +4,7 @@ import { User } from '@prisma/client';
 import { v4 as uuid } from 'uuid';
 import { CreateUserDto } from './dto/create-user-schema';
 import { hash } from 'bcrypt';
-import { PrismaService } from 'src/services/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 type CreateUserData = Omit<User, 'createdAt' | 'updatedAt' | 'isActive'>;
 

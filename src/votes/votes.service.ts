@@ -2,8 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateVoteDto } from './dto/create-vote.dto';
 import { Vote } from '@prisma/client';
 import { v4 as uuid } from 'uuid';
-import { createNewVoteMessages } from 'src/constants/response-messages';
-import { PrismaService } from 'src/services/prisma.service';
+import { createNewVoteMessages } from '../constants/response-messages';
+import { PrismaService } from '../prisma/prisma.service';
 
 type CreateVoteData = Omit<Vote, 'createdAt' | 'updatedAt'>;
 

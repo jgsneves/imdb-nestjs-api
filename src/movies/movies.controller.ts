@@ -14,12 +14,12 @@ import {
 import { MoviesService } from './movies.service';
 import { CreateMovieDto, createMovieSchema } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
-import { ZodValidationPipe } from 'src/validators/zod-validation-pipe';
-import { RolesGuard } from 'src/auth/roles.guard';
-import { VotesService } from 'src/votes/votes.service';
+import { AuthGuard } from '../auth/auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { ZodValidationPipe } from '../validators/zod-validation-pipe';
+import { VotesService } from '../votes/votes.service';
 
 @Controller('movies')
 export class MoviesController {
@@ -38,10 +38,10 @@ export class MoviesController {
 
   @Get()
   findAll(
-    @Query('directorName') directorName: string,
-    @Query('genre') genre: string,
-    @Query('name') name: string,
-    @Query('actors') actors: string,
+    @Query('directorName') directorName?: string,
+    @Query('genre') genre?: string,
+    @Query('name') name?: string,
+    @Query('actors') actors?: string,
   ) {
     const actorsQueryParam = this.parseFindAllActorsQueryParam(actors);
 
@@ -54,12 +54,12 @@ export class MoviesController {
   }
 
   @Get(':uuid')
-  findOne(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+  findOne(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.moviesService.findOne(uuid);
   }
 
   @Get(':uuid/votes-average')
-  findOneMovieAverage(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+  findOneMovieAverage(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.votesService.findVoteAverageByMovieId(uuid);
   }
 
@@ -67,7 +67,7 @@ export class MoviesController {
   @Roles(UserRole.ADMIN)
   @Patch(':uuid')
   update(
-    @Param('uuid', new ParseUUIDPipe()) uuid: string,
+    @Param('uuid', ParseUUIDPipe) uuid: string,
     @Body() updateMovieDto: UpdateMovieDto,
   ) {
     return this.moviesService.update(uuid, updateMovieDto);
@@ -76,7 +76,7 @@ export class MoviesController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Delete(':uuid')
-  remove(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
+  remove(@Param('uuid', ParseUUIDPipe) uuid: string) {
     return this.moviesService.remove(uuid);
   }
 

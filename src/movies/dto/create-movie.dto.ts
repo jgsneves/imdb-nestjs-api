@@ -1,5 +1,5 @@
-import { createMovieValidationMessages } from 'src/constants/validation-request-body-messages';
 import { z } from 'zod';
+import { createMovieValidationMessages } from '../../constants/validation-request-body-messages';
 
 export const createMovieSchema = z.object({
   name: z.string({ required_error: createMovieValidationMessages.name }),
