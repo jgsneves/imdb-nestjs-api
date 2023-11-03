@@ -31,7 +31,7 @@ export class AuthService {
 
     return {
       access_token: await this.jwtService.signAsync(payload),
-      expires_in: 60000,
+      expires_in: 2,
     };
   }
 }

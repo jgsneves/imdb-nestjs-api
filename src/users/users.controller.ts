@@ -17,12 +17,13 @@ import { CreateUserDto, createUserSchema } from './dto/create-user-schema';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Post()
   @UsePipes(new ZodValidationPipe(createUserSchema))

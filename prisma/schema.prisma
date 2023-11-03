@@ -31,7 +31,7 @@ model Movie {
   id           String   @id @db.Uuid
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  name         String
+  name         String   @unique
   releaseDate  DateTime
   genre        String
   directorName String
