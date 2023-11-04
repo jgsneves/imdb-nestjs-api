@@ -46,15 +46,15 @@ $ npm run start:prod
 ```
 
 ## Para testar
-
+Importante ressaltar que o fim deste repositório é de apenas expor o conhecimento do programador-autor deste projeto. Com isso em mente, apenas os testes unitários e de integração referentes à funcionalidade `Movies` foram implementados. Porém, em um cenário real, o ideal é que todos os endpoints sejam testados tanto unitariamente como através de testes de integração.
 ```bash
-# unit tests
+# testes unitários
 $ npm run test
 
-# e2e tests
+# testes e2e
 $ npm run test:e2e
 
-# test coverage
+# coverage
 $ npm run test:cov
 ```
 
@@ -63,13 +63,19 @@ $ npm run test:cov
  1. [NestJS](https://nestjs.com/): um framework robusto que utiliza NodeJS e [ExpressJS](https://expressjs.com/pt-br/) por debaixo dos panos, misturando toda a versatilidade do Node com a segurança de uma arquitetura voltada para a [Injeção de Dependência](https://en.wikipedia.org/wiki/Dependency_injection). O Nest lembra muito a forma de trabalhar de grandes frameworks já consolidados como o .NET.
  2. [PrismaORM](https://www.prisma.io/): uma library para NodeJS que nos auxilia na conexão com um banco de dados, além da criação e utilização de queries e mutations, pensando sempre na segurança e escalabilidade da aplicação. Já vem com built-ins de segurança para prever SQL Injection, dentre outras funcionalidades.
  3. [bcrypt](https://www.npmjs.com/package/bcrypt): biblioteca consolidada para a encriptação de caracteres, utilizada para encriptar senhas que serão salvas no Banco de Dados.
- 4. Zod
- 5. Typescript
- 6. Jest
- 7. Postegres
+ 4. [Zod](https://zod.dev/): biblioteca criada para fazer validação e declaração de tipos, usando Typescript. Ela garante que a tipagem estática seja respeitada em tempo de execução (runtime).
+ 5. [Typescript](https://www.typescriptlang.org/): super-set de javascript, uma linguagem de programação fortemente tipada que é construída sobre o Javascript, complementa a linguagem para introduzir tipagem estática, segurança no desenvolvimento e uma intellisense mais descritiva.
+ 6. [Jest](https://jestjs.io/pt-BR/): framework de teste Javascript amplatamente utilizado no mercado.
+ 7. [Postegres](https://www.postgresql.org/): banco de dados open-source com ótimas features built-in, como enum scalar, array scalar, suporte a JSON, etc.
 
 ## Swagger/documentação
 Após startar a aplicação, está disponível o swagger (OpenAPI) da API no seguinte endereço:
 ```bash
  localhost:3000/api/swagger
 ```
+
+## Postman Collections
+1. [Votes Collection](https://drive.google.com/file/d/1LY0rZNBRyUnvCMWpHVUdZGGoaphFbBJY/view?usp=drive_link)
+2. [Users Collection](https://drive.google.com/file/d/1zx3VCiOTskBA-CwqTujxEQrUtJVU84vm/view?usp=drive_link)
+3. [Movies Collection](https://drive.google.com/file/d/1RgCaF5AwNthhUe67BsAM6eQahyNoXBXd/view?usp=drive_link)
+4. [Auth Collection](https://drive.google.com/file/d/1d60RsMYTIdKNdwxL1kznYeryj7nZbCrb/view?usp=drive_link)
