@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Vote } from '@prisma/client';
 import { z } from 'zod';
 
 export const createVoteScheme = z.object({
@@ -7,3 +9,16 @@ export const createVoteScheme = z.object({
 });
 
 export type CreateVoteDto = z.infer<typeof createVoteScheme>;
+
+export class CreateVoteDtoSwagger
+  implements Omit<Vote, 'createdAt' | 'updatedAt' | 'id'>
+{
+  @ApiProperty()
+  movieId: string;
+
+  @ApiProperty()
+  userId: string;
+
+  @ApiProperty()
+  value: number;
+}

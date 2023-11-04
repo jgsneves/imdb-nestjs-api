@@ -8,8 +8,11 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('IMDB API')
-    .setDescription('The movies database API')
+    .setDescription(
+      'The movies database API. Use Authorize button to login to plataform and retrieve a bearer token',
+    )
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/swagger', app, document);

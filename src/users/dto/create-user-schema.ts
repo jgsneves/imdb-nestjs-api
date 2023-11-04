@@ -1,7 +1,8 @@
-import { UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { z } from 'zod';
 import { createUserValidationMessages } from '../../constants/validation-request-body-messages';
 import { PasswordValidation } from '../../validators/password-validation';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const createUserSchema = z
   .object({
@@ -23,3 +24,22 @@ export const createUserSchema = z
   });
 
 export type CreateUserDto = z.infer<typeof createUserSchema>;
+
+export class CreateUserDtoSwager
+  implements Omit<User, 'createdAt' | 'id' | 'updatedAt' | 'role' | 'isActive'>
+{
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  password: string;
+
+  @ApiProperty()
+  confirmPassword: string;
+
+  @ApiProperty()
+  role: string;
+}

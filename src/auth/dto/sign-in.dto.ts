@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { signInValidationMessages } from 'src/constants/validation-request-body-messages';
 import { z } from 'zod';
 
@@ -7,3 +8,11 @@ export const signInDto = z.object({
 });
 
 export type SignInDto = z.infer<typeof signInDto>;
+
+export class SignInDtoSwagger {
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  password: string;
+}
