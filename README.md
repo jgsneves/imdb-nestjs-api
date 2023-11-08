@@ -5,11 +5,10 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">Esta aplicação utiliza o framework NestJS que abstrar as funcionalidades do <a href="http://nodejs.org" target="_blank">Node.js</a>, com o fim de construir uma API eficiente e escalável.</p>
+  <p align="center">Esta aplicação utiliza o framework NestJS que abstrai as funcionalidades do <a href="http://nodejs.org" target="_blank">Node.js</a>, com o fim de construir uma API eficiente e escalável.</p>
     <p align="center">
     
 ## Descrição
-
 Este repositório codifica uma RESTful API com as seguintes funcionalidades:
 ### 1) Gerenciamento de entidade Usuário, com privilégio de acesso para Admins
 Nesta aplicação é possível criar, editar, realizar exclusão lógica (desativar) e receber uma lista com todos os Usuários cadastrados na plataforma. Há também privilégio de acesso para usuários com a função `Admin`, sendo possível apenas para estes últimos o cadastro de novos usuários.
@@ -21,19 +20,25 @@ Filmes podem ser cadastrados nesta API, além de serem editados ou deletados. A 
 Usuários cadastrados e logados podem votar nos filmes em uma classificação que varia de 0 a 4 pontos. Há a disponibilidade também de um endpoint com a pontuação média de cada filme.
 
 ## Como instalar este repositório?
-Primeiramente você deve possuir um banco de dados `postgres` local (ou na nuvem) que possa receber a conexão do `PrismaORM` deste projeto. A recomendação é utilizar [docker](https://hub.docker.com/_/postgres) para encapsular a lógica do banco dentro de um container.
+### Utilizando docker
+Primeiramente você deve clonar este repositório em sua máquina local. Possuindo docker instalado em sua máquina (caso utilize windows, deve utilizar o WSL), execute o seguinte comando:
+```bash
+$ docker-compose up -d
+```
+Este comando criará dois containers: um para o postegres e outro para a API. A api estará exposta no endereço `localhost:3000`.
+
+### Sem utilizar docker
+
+Você deve possuir um banco de dados `postgres` local (ou na nuvem) que possa receber a conexão do `PrismaORM` deste projeto. A recomendação é utilizar [docker](https://hub.docker.com/_/postgres) para encapsular a lógica do banco dentro de um container.
 
 Após clonar este repositório para seu ambiente local, deve instalar todas as bibliotecas através do seguinte comando:
 ```bash
 $ npm install
 ```
-Importante também criar um arquivo `.env` na raiz do projeto e preencher as variáveis de ambiente dentro dele:
-```bash
-DATABASE_URL= url no seguinte formato: postgresql://janedoe:mypassword@localhost:5432/mydb?schema=sample
-JWT_SECRET= um hash aleatório que servirá como secret da criação de tokens JWT
-```
-## Iniciando o APP
+O arquivo `.env` na raiz do projeto já foi criado e deve ser utilizado em ambiente de desenvolvimento.
 
+## Iniciando o APP
+Caso opte por utilizar `docker`, a aplicação já estará exposta com a criação dos containers. Caso contrário, deverá utilizar algum dos comandos abaixo para iniciar a aplicação em uma das portas de seu computador:
 ```bash
 # Após o build, localmente
 $ npm run start
@@ -45,6 +50,22 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Usuário admin inicial
+Após iniciar os containers, as migrations serão aplicadas automaticamente. Para criar um primeiro usuário admin, execute o seguinte comando, onde `<id do container>` é o ID do container da api, que tem nome `nest-api`:
+```bash
+$ docker exec <id do container> npx prisma db seed
+```
+Após, é possível realizar login na plataforma através do endpoint de login ou através do frontend, com o seguinte usuário:
+```JSON
+{
+	"email": "admin@gmail.com",
+	"senha": "Senha@13456&"
+}
+```
+Caso não utilize `docker`, execute o comando abaixo:
+```bash
+npx prisma db seed
+```
 ## Para testar
 Importante ressaltar que o fim deste repositório é de apenas expor o conhecimento do programador-autor deste projeto. Com isso em mente, apenas os testes unitários e de integração referentes à funcionalidade `Movies` foram implementados. Porém, em um cenário real, o ideal é que todos os endpoints sejam testados tanto unitariamente como através de testes de integração.
 ```bash
@@ -67,6 +88,7 @@ $ npm run test:cov
  5. [Typescript](https://www.typescriptlang.org/): super-set de javascript, uma linguagem de programação fortemente tipada que é construída sobre o Javascript, complementa a linguagem para introduzir tipagem estática, segurança no desenvolvimento e uma intellisense mais descritiva.
  6. [Jest](https://jestjs.io/pt-BR/): framework de teste Javascript amplatamente utilizado no mercado.
  7. [Postegres](https://www.postgresql.org/): banco de dados open-source com ótimas features built-in, como enum scalar, array scalar, suporte a JSON, etc.
+ 8. [Docker](https://www.docker.com/): utilizar containers garante que o ambiente em que a aplicação é executada é isolado e facilmente replicado. Além disso, dá a possibilidade de executar a aplicação apenas se um container de banco de dados estiver ativo.
 
 ## Swagger/documentação
 Após startar a aplicação, está disponível o swagger (OpenAPI) da API no seguinte endereço:
@@ -79,3 +101,6 @@ Após startar a aplicação, está disponível o swagger (OpenAPI) da API no seg
 2. [Users Collection](https://drive.google.com/file/d/1zx3VCiOTskBA-CwqTujxEQrUtJVU84vm/view?usp=drive_link)
 3. [Movies Collection](https://drive.google.com/file/d/1RgCaF5AwNthhUe67BsAM6eQahyNoXBXd/view?usp=drive_link)
 4. [Auth Collection](https://drive.google.com/file/d/1d60RsMYTIdKNdwxL1kznYeryj7nZbCrb/view?usp=drive_link)
+
+## Variáveis de Ambiente
+Por questões de segurança, não é recomendado compartilhar os segredos dentro do código, nem inserir o arquivo `.env` dentro do git. Porém, para fins de facilitar o clone do projeto, o arquivo `.env` foi compartilhado com esse repositório.
