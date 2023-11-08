@@ -53,10 +53,15 @@ export class VotesController {
     name: 'movieId',
     required: false,
   })
+  @ApiQuery({
+    name: 'userId',
+    required: false,
+  })
   @Get()
   findAll(
     @Query('movieId', new ParseUUIDPipe({ optional: true })) movieId?: string,
+    @Query('userId', new ParseUUIDPipe({ optional: true })) userId?: string,
   ) {
-    return this.votesService.findAll(movieId);
+    return this.votesService.findAll(movieId, userId);
   }
 }

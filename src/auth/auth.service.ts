@@ -1,6 +1,5 @@
 import {
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
@@ -17,7 +16,7 @@ export class AuthService {
   async signIn(email: string, pass: string) {
     const user = await this.usersService.findOneByEmail(email);
 
-    if (!user) throw new NotFoundException();
+    if (!user) throw new UnauthorizedException();
 
     const isPasswordCorrect = await compare(pass, user.password);
 

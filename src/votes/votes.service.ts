@@ -38,10 +38,11 @@ export class VotesService {
     return result;
   }
 
-  async findAll(movieIdFilter?: string) {
+  async findAll(movieIdFilter?: string, userIdFilter?: string) {
     const result = await this.prisma.vote.findMany({
       where: {
         movieId: movieIdFilter,
+        userId: userIdFilter,
       },
     });
 
